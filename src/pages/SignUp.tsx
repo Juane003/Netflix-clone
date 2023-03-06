@@ -1,8 +1,8 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { signInUser } from "../firebase/auth";
+import { createUser } from "../firebase/auth";
 
-export const SignIn = () => {
+export const SignUp = () => {
   const [user, setUser] = useState({
     email: "",
     password: "",
@@ -13,7 +13,7 @@ export const SignIn = () => {
     event.preventDefault();
     if (!user.email) return;
     if (!user.password) return;
-    await signInUser(user.email, user.password);
+    await createUser(user.email, user.password);
     navigate("/");
   };
 
@@ -38,7 +38,7 @@ export const SignIn = () => {
           <div className="fixed z-50 w-full px-4 py-24">
             <div className="mx-auto h-[600px] max-w-[450px] bg-black/75 text-white">
               <div className="mx-auto max-w-[320px] py-16">
-                <h1 className="text-3xl font-bold">Sign In</h1>
+                <h1 className="text-3xl font-bold">Sign Up</h1>
                 <form
                   className="flex w-full flex-col py-4"
                   onSubmit={handleSubmit}
@@ -56,7 +56,7 @@ export const SignIn = () => {
                     onChange={handlePasswordOnChange}
                   />
                   <button className="my-6 rounded bg-red-600 py-3 font-bold">
-                    Sign In
+                    Sign Up
                   </button>
                   <div className="flex items-center justify-between text-sm text-gray-600">
                     <p>
@@ -66,8 +66,10 @@ export const SignIn = () => {
                     <p>Need Help?</p>
                   </div>
                   <p className="py-8">
-                    <span className="text-gray-600">New to Netflix?</span>{" "}
-                    <Link to="/sign-up">Sign Up</Link>
+                    <span className="text-gray-600">
+                      Already suscribed to Netflix?
+                    </span>{" "}
+                    <Link to="/sign-in">Sign In</Link>
                   </p>
                 </form>
               </div>

@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { ImageBaseUrl } from "../api/api";
 import { APIResponse, Movie } from "../types";
 
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
@@ -15,7 +14,7 @@ interface RowProps {
 export const Row = ({ name, fetcher }: RowProps) => {
   const [movies, setMovies] = useState<Movie[]>([]);
 
-  const sliderRef = useRef<HTMLDivElement | null>(null);
+  const sliderRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,24 +25,24 @@ export const Row = ({ name, fetcher }: RowProps) => {
   }, []);
 
   const handleSlideRight = () => {
-    sliderRef.current.scrollLeft += 500;
+    if (sliderRef.current) sliderRef.current.scrollLeft += 500;
   };
   const handleSlideLeft = () => {
-    sliderRef.current.scrollLeft -= 500;
+    if (sliderRef.current) sliderRef.current.scrollLeft -= 500;
   };
 
   return (
-    <>
-      <h1 className="text-white">{name}</h1>
-      <div className="relative flex items-center group">
+    <div className="px-8">
+      <h1 className="py-2 pl-4 text-xl font-bold text-white">{name}</h1>
+      <div className="group relative flex items-center">
         <MdChevronLeft
           onClick={handleSlideLeft}
           size={40}
-          className="absolute left-0 bg-white rounded-full opacity-50 hover:opacity-100 z-10 hidden group-hover:block"
+          className="absolute left-0 z-10 hidden rounded-full bg-white opacity-50 duration-300 hover:opacity-100 group-hover:block"
         />
         <div
           ref={sliderRef}
-          className="w-full h-full whitespace-nowrap scroll-smooth overflow-hidden relative"
+          className="relative h-full w-full overflow-hidden scroll-smooth whitespace-nowrap"
         >
           {movies.map((movie) => (
             <RowItem movie={movie} />
@@ -52,9 +51,9 @@ export const Row = ({ name, fetcher }: RowProps) => {
         <MdChevronRight
           onClick={handleSlideRight}
           size={40}
-          className="absolute right-0  bg-white rounded-full opacity-50 hover:opacity-100 z-10 hidden group-hover:block"
+          className="absolute right-0  z-10 hidden rounded-full bg-white opacity-50 duration-300 hover:opacity-100 group-hover:block"
         />
       </div>
-    </>
+    </div>
   );
 };

@@ -21,3 +21,9 @@ export interface Movie {
   vote_average: number;
   vote_count: number;
 }
+
+export interface FirebaseMovie {
+  img: string;
+  id: string | number;
+  title: string;
+}
