@@ -12,7 +12,7 @@ interface RowItemProps {
 
 export const RowItem = ({ movie }: RowItemProps) => {
   const [like, setLike] = useState<boolean>(false);
-  const [saved, setSaved] = useState(false);
+
   const { currentUser } = useAuthContext();
 
   const movieRef = getMovieRef(currentUser);
@@ -36,7 +36,6 @@ export const RowItem = ({ movie }: RowItemProps) => {
     if (!movieRef) return;
 
     setLike((prev) => !prev);
-    setSaved(true);
 
     await updateDoc(movieRef, {
       savedShows: arrayUnion({
