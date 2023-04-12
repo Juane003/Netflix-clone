@@ -8,9 +8,10 @@ import { arrayUnion, getDoc, updateDoc } from "firebase/firestore";
 
 interface RowItemProps {
   movie: Movie;
+  isLoading: boolean;
 }
 
-export const RowItem = ({ movie }: RowItemProps) => {
+export const RowItem = ({ movie, isLoading }: RowItemProps) => {
   const [like, setLike] = useState<boolean>(false);
 
   const { currentUser } = useAuthContext();
@@ -49,23 +50,30 @@ export const RowItem = ({ movie }: RowItemProps) => {
 
   return (
     <div className="relative inline-block w-[160px] cursor-pointer p-2 sm:w-[200px] md:w-[240px] lg:w-[280px]">
-      <img
-        className="block h-auto w-full object-cover "
-        src={`${ImageBaseUrl}${movie?.backdrop_path}`}
-        alt={movie?.title}
-      />
-      <div className="absolute top-0 left-0 h-full w-full text-white opacity-0 duration-300 hover:bg-black/80 hover:opacity-100">
-        <p className="flex h-full items-center justify-center whitespace-normal p-2 text-center text-xs font-bold md:text-sm">
-          {movie?.title}
-        </p>
-        <p onClick={saveMovie}>
-          {like ? (
-            <FaHeart className="absolute top-4 left-4 text-gray-300" />
-          ) : (
-            <FaRegHeart className="absolute top-4 left-4 text-gray-300" />
-          )}
-        </p>
-      </div>
+      {isLoading ? (
+        <div className="h-32 text-white">Is Loading</div>
+      ) : (
+        <>
+          <img
+            className="block h-auto w-full object-cover "
+            src={`${ImageBaseUrl}${movie?.backdrop_path}`}
+            alt={movie?.title}
+          />
+
+          <div className="absolute top-0 left-0 h-full w-full text-white opacity-0 duration-300 hover:bg-black/80 hover:opacity-100">
+            <p className="flex h-full items-center justify-center whitespace-normal p-2 text-center text-xs font-bold md:text-sm">
+              {movie?.title}
+            </p>
+            <p onClick={saveMovie}>
+              {like ? (
+                <FaHeart className="absolute top-4 left-4 text-gray-300" />
+              ) : (
+                <FaRegHeart className="absolute top-4 left-4 text-gray-300" />
+              )}
+            </p>
+          </div>
+        </>
+      )}
     </div>
   );
 };

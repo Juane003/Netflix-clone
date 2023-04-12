@@ -4,10 +4,13 @@ import {
   Route,
   createRoutesFromElements,
 } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "react-query";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
 import { RootLayout } from "./Layout/RootLayout";
-import { Account, Dashboard, Movie, SignIn, SignUp } from "./pages";
+import { Account, Dashboard, SignIn, SignUp } from "./pages";
+
+const queryClient = new QueryClient();
 
 const App = () => {
   const routes = createBrowserRouter(
@@ -24,11 +27,14 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-        <Route path="/movie/:id" element={<Movie />} />
       </Route>
     )
   );
-  return <RouterProvider router={routes} />;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={routes} />
+    </QueryClientProvider>
+  );
 };
 
 export default App;

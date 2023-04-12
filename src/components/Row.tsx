@@ -3,6 +3,7 @@ import { APIResponse, Movie } from "../types";
 
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import { RowItem } from "./RowItem";
+import { useQuery } from "react-query";
 
 type Name = "Popular" | "Horror" | "Top rated" | "Trending" | "Upcoming";
 
@@ -12,17 +13,17 @@ interface RowProps {
 }
 
 export const Row = ({ name, fetcher }: RowProps) => {
-  const [movies, setMovies] = useState<Movie[]>([]);
+  const {
+    data: movies,
+    isLoading,
+    isError,
+  } = useQuery({ queryKey: ["movies", name], queryFn: fetcher });
 
   const sliderRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await fetcher();
-      setMovies(data.results);
-    };
-    fetchData();
-  }, []);
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error ocurred</div>;
+  if (!movies) return null;
 
   const handleSlideRight = () => {
     if (sliderRef.current) sliderRef.current.scrollLeft += 500;
@@ -44,8 +45,8 @@ export const Row = ({ name, fetcher }: RowProps) => {
           ref={sliderRef}
           className="relative h-full w-full overflow-hidden scroll-smooth whitespace-nowrap"
         >
-          {movies.map((movie) => (
-            <RowItem movie={movie} />
+          {movies.results.map((movie) => (
+            <RowItem movie={movie} isLoading={isLoading} />
           ))}
         </div>
         <MdChevronRight
