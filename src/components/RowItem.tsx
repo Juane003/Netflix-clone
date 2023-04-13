@@ -1,6 +1,6 @@
 import { ImageBaseUrl } from "../api/api";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FirebaseMovie, Movie } from "../types";
 import { getMovieRef } from "../firebase/db";
 import { useAuthContext } from "../context/AuthContext";
@@ -16,7 +16,9 @@ export const RowItem = ({ movie, isLoading }: RowItemProps) => {
 
   const { currentUser } = useAuthContext();
 
-  const movieRef = getMovieRef(currentUser);
+  const movieRef = useMemo(() => {
+    return getMovieRef(currentUser);
+  }, []);
 
   useEffect(() => {
     const isMovieLiked = async () => {
@@ -24,10 +26,10 @@ export const RowItem = ({ movie, isLoading }: RowItemProps) => {
       await getDoc(movieRef).then((doc) => {
         const res = doc
           .data()
-          ?.savedShows.filter(
+          ?.savedShows.find(
             (currentMovie: FirebaseMovie) => currentMovie.id === movie.id
           );
-        if (res.length !== 0) setLike(true);
+        if (res) setLike(true);
       });
     };
     isMovieLiked();

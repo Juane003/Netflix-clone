@@ -9,6 +9,7 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 
 import { RootLayout } from "./Layout/RootLayout";
 import { Account, Dashboard, SignIn, SignUp } from "./pages";
+import { mainPageLoader } from "./pages/Dashboard";
 
 const queryClient = new QueryClient();
 
@@ -16,7 +17,11 @@ const App = () => {
   const routes = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<RootLayout />}>
-        <Route index element={<Dashboard />} />
+        <Route
+          index
+          element={<Dashboard />}
+          loader={mainPageLoader(queryClient)}
+        />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route

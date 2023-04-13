@@ -1,23 +1,18 @@
-import { useEffect, useRef, useState } from "react";
-import { APIResponse, Movie } from "../types";
+import { useRef } from "react";
 
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import { RowItem } from "./RowItem";
 import { useQuery } from "react-query";
+import { categoryQuery } from "../pages/Dashboard";
 
-type Name = "Popular" | "Horror" | "Top rated" | "Trending" | "Upcoming";
+type Name = "Upcoming" | "Popular" | "Trending" | "Top Rated" | "Horror";
 
 interface RowProps {
   name: Name;
-  fetcher: () => Promise<APIResponse>;
 }
 
-export const Row = ({ name, fetcher }: RowProps) => {
-  const {
-    data: movies,
-    isLoading,
-    isError,
-  } = useQuery({ queryKey: ["movies", name], queryFn: fetcher });
+export const Row = ({ name }: RowProps) => {
+  const { data: movies, isLoading, isError } = useQuery(categoryQuery(name));
 
   const sliderRef = useRef<HTMLDivElement>(null);
 

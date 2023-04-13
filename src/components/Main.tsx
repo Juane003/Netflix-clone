@@ -1,16 +1,15 @@
-import { useQuery } from "react-query";
-import { API, ImageBaseUrl } from "../api/api";
+import { useMemo } from "react";
+import { ImageBaseUrl } from "../api/api";
+import { Movie } from "../types";
 
-export const Main = () => {
-  const { data: movies } = useQuery({
-    queryKey: ["movies"],
-    queryFn: API.getPopular,
-  });
+interface MainProps {
+  movies: Movie[];
+}
 
-  if (!movies) return null;
-
-  const randomMovie =
-    movies.results[Math.floor(Math.random() * movies.results.length)];
+export const Main = ({ movies }: MainProps) => {
+  const randomMovie = useMemo(() => {
+    return movies[Math.floor(Math.random() * movies.length)];
+  }, []);
 
   return (
     <div className="h-[550px] w-full text-white">
